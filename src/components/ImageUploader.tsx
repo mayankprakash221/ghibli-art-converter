@@ -3,6 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
+interface ApiError extends Error {
+  message: string;
+}
+
 export default function ImageUploader() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -81,8 +85,9 @@ CRITICAL: The subject's characteristics, pose, direction, and appearance must ma
       const blob = await response.blob();
       const imageUrl = URL.createObjectURL(blob);
       setConvertedImage(imageUrl);
-    } catch (err: any) {
-      setError(err.message || 'An error occurred while converting the image');
+    } catch (err) {
+      const error = err as ApiError;
+      setError(error.message || 'An error occurred while converting the image');
     } finally {
       setIsLoading(false);
       setIsRegenerating(false);

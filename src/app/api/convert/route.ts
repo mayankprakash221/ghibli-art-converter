@@ -6,6 +6,14 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+interface ErrorWithResponse extends Error {
+  response?: {
+    data?: unknown;
+    status?: number;
+  };
+  code?: string;
+}
+
 export async function POST(req: NextRequest) {
   try {
     console.log('Starting API request processing...');
@@ -128,11 +136,12 @@ Important: Do not change any part of the photo's structure or clothing. This is 
         imageBuffer = await imageResponse.arrayBuffer();
         console.log('Image downloaded successfully, size:', imageBuffer.byteLength);
         break;
-      } catch (error: any) {
+      } catch (error) {
+        const typedError = error as Error;
         retries--;
         if (retries === 0) {
-          console.log('All download attempts failed:', error.message);
-          throw new Error(`Failed to download image after 3 attempts: ${error.message}`);
+          console.log('All download attempts failed:', typedError.message);
+          throw new Error(`Failed to download image after 3 attempts: ${typedError.message}`);
         }
         console.log(`Retry attempt ${3 - retries} failed, retrying...`);
         await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retrying
@@ -151,22 +160,23 @@ Important: Do not change any part of the photo's structure or clothing. This is 
         'Expires': '0'
       }
     });
-  } catch (error: any) {
+  } catch (error) {
+    const typedError = error as ErrorWithResponse;
     console.error('Detailed error:', {
-      message: error.message,
-      stack: error.stack,
-      response: error.response?.data,
-      status: error.response?.status,
-      name: error.name,
-      code: error.code
+      message: typedError.message,
+      stack: typedError.stack,
+      response: typedError.response?.data,
+      status: typedError.response?.status,
+      name: typedError.name,
+      code: typedError.code
     });
     
     return NextResponse.json(
       { 
-        error: error.message || 'Error generating image. Please try again.',
-        details: error.response?.data || error.stack,
-        type: error.name,
-        code: error.code
+        error: typedError.message || 'Error generating image. Please try again.',
+        details: typedError.response?.data || typedError.stack,
+        type: typedError.name,
+        code: typedError.code
       },
       { status: 500 }
     );

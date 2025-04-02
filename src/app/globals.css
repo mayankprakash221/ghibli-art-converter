@@ -15,123 +15,74 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: #ffffff;  /* Pure white background */
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
 }
 
-/* Hero background image */
-.hero-background {
+/* Main background pattern */
+.background-pattern {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('/spirited-away-bg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.25;  /* Very light opacity */
-  z-index: -2;
-}
-
-/* Overlay gradient */
-.hero-background::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.85) 100%
-  );
+  background-image: 
+    radial-gradient(circle at 100% 100%, rgba(255, 192, 203, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 0% 0%, rgba(147, 112, 219, 0.1) 0%, transparent 50%),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%);
+  background-size: 200% 200%, 200% 200%, 60px 60px, 60px 60px;
+  background-position: 0% 0%, 100% 100%, 0 0, 30px 30px;
+  animation: gradientBG 15s ease infinite;
   z-index: -1;
 }
 
-/* Floating clouds animation */
+@keyframes gradientBG {
+  0% { background-position: 0% 0%, 100% 100%, 0 0, 30px 30px; }
+  50% { background-position: 100% 100%, 0% 0%, 30px 30px, 0 0; }
+  100% { background-position: 0% 0%, 100% 100%, 0 0, 30px 30px; }
+}
+
+/* Floating elements animation */
 @keyframes float {
-  0% { transform: translateY(0px) translateX(0px); }
-  50% { transform: translateY(-20px) translateX(10px); }
-  100% { transform: translateY(0px) translateX(0px); }
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
 }
 
-.floating-cloud {
+.floating-element {
   position: fixed;
-  width: 200px;
-  height: 120px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFFFFF'%3E%3Cpath d='M19.35 10.03A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.03A6.004 6.004 0 0 0 0 14a6 6 0 0 0 6 6h13a5 5 0 0 0 5-5c0-2.64-2.05-4.78-4.65-4.97z'/%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  opacity: 0.15;
-  animation: float 8s ease-in-out infinite;
+  width: 100px;
+  height: 100px;
+  opacity: 0.1;
+  animation: float 6s ease-in-out infinite;
   z-index: -1;
 }
 
-.floating-cloud:nth-child(1) {
-  top: 15%;
+.floating-element:nth-child(1) {
+  top: 10%;
   left: 10%;
+  background: radial-gradient(circle, #ff69b4 0%, transparent 70%);
   animation-delay: 0s;
 }
 
-.floating-cloud:nth-child(2) {
-  top: 45%;
+.floating-element:nth-child(2) {
+  top: 30%;
   right: 15%;
+  background: radial-gradient(circle, #9370db 0%, transparent 70%);
   animation-delay: 2s;
-  transform: scale(1.5);
 }
 
-.floating-cloud:nth-child(3) {
+.floating-element:nth-child(3) {
   bottom: 20%;
-  left: 25%;
+  left: 20%;
+  background: radial-gradient(circle, #6495ed 0%, transparent 70%);
   animation-delay: 4s;
-  transform: scale(0.8);
 }
 
-/* Sparkle effect */
-@keyframes sparkle {
-  0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
-  50% { transform: scale(1.2) rotate(180deg); opacity: 0.4; }
-  100% { transform: scale(1) rotate(360deg); opacity: 0.8; }
-}
-
-.sparkle {
-  position: fixed;
-  width: 15px;
-  height: 15px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFFFFF'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  opacity: 0.3;
-  animation: sparkle 4s ease-in-out infinite;
-  z-index: -1;
-}
-
-.sparkle:nth-child(1) { top: 25%; left: 15%; animation-delay: 0s; }
-.sparkle:nth-child(2) { top: 35%; right: 25%; animation-delay: 1s; }
-.sparkle:nth-child(3) { bottom: 35%; left: 35%; animation-delay: 2s; }
-
-/* Ghibli-style loading animation */
-@keyframes sootSprite {
-  0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
-  50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
-  100% { transform: translateY(0) rotate(360deg); opacity: 0.6; }
-}
-
-.loading-sprite {
-  position: relative;
-  width: 60px;
-  height: 60px;
-  margin: 20px auto;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000000' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z'/%3E%3Ccircle cx='12' cy='12' r='5' fill='%23000000'/%3E%3C/svg%3E");
-  background-size: contain;
-  animation: sootSprite 2s infinite ease-in-out;
-}
-
-/* Hover effects for cards */
+/* Card hover effects */
 .card-hover {
   transition: all 0.3s ease;
   transform-style: preserve-3d;
@@ -143,45 +94,7 @@ body {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
-/* Magic sparkle trail on cursor */
-.cursor-trail {
-  pointer-events: none;
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
-  border-radius: 50%;
-  animation: fadeOut 1s linear forwards;
-  z-index: 9999;
-}
-
-@keyframes fadeOut {
-  0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(2); opacity: 0; }
-}
-
-/* Animated background patterns */
-.animated-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(circle at 100% 100%, rgba(255,255,255,0.4) 0%, transparent 50%),
-    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.4) 0%, transparent 50%);
-  background-size: 200% 200%;
-  animation: gradientMove 15s ease infinite;
-  z-index: -3;
-}
-
-@keyframes gradientMove {
-  0% { background-position: 0% 0%; }
-  50% { background-position: 100% 100%; }
-  100% { background-position: 0% 0%; }
-}
-
-/* Interactive button effects */
+/* Magic button effects */
 .magic-btn {
   position: relative;
   overflow: hidden;
@@ -202,6 +115,62 @@ body {
 
 .magic-btn:hover::before {
   transform: translate(-50%, -50%) scale(1);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #ff69b4, #9370db);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #ff1493, #8a2be2);
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.6; }
+}
+
+.loading-animation {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Image hover effect */
+.image-hover {
+  transition: transform 0.3s ease;
+}
+
+.image-hover:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Magic sparkle trail on cursor */
+.cursor-trail {
+  pointer-events: none;
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  animation: fadeOut 1s linear forwards;
+  z-index: 9999;
+}
+
+@keyframes fadeOut {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
 }
 
 /* Image comparison slider effect */
